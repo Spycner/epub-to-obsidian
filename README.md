@@ -10,6 +10,7 @@ Convert EPUB books into Obsidian-compatible markdown files with proper structure
 - **Fast Conversion**: Efficient processing using MarkItDown for HTML to Markdown
 - **Organized Output**: Creates structured vault with Index, Info, and Chapter files
 - **Image Support**: Extracts and organizes book images
+- **AI-Ready**: Perfect for use with Claude in Obsidian - ask questions about your books!
 
 ## Installation
 
@@ -26,6 +27,19 @@ pip install -e .
 ```
 
 ## Usage
+
+### Quick Start
+
+```bash
+# Convert an EPUB file using the example script
+uv run scripts/example_conversion.py book.epub ./output/
+
+# Or use the full CLI after installation
+epub-to-obsidian convert book.epub --output ./output/
+```
+
+The example script at `scripts/example_conversion.py` provides a simple standalone converter that requires no installation and can be run directly with `uv`.
+
 
 ### Convert a single EPUB
 
