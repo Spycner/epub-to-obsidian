@@ -33,8 +33,8 @@ class ObsidianWriter:
         chapters = parser.get_chapters()
         toc = parser.get_toc()
 
-        # Create book directory
-        book_dir = self._create_book_directory(metadata['title'])
+        # Create book directory with author and title
+        book_dir = self._create_book_directory(metadata)
 
         # Write images if requested
         if include_images:
@@ -70,11 +70,20 @@ class ObsidianWriter:
 
         return book_dir
 
-    def _create_book_directory(self, book_title: str) -> Path:
-        """Create the book directory with sanitized name."""
-        # Sanitize book title for directory name
+    def _create_book_directory(self, metadata: dict) -> Path:
+        """Create the book directory with author and title format."""
+        # Get author and title
+        book_title = metadata.get('title', 'Unknown Title')
+        authors = metadata.get('authors', ['Unknown Author'])
+        # Use first author if multiple
+        author = authors[0] if authors else 'Unknown Author'
+
+        # Sanitize both author and title for directory name
+        safe_author = self._sanitize_filename(author)
         safe_title = self._sanitize_filename(book_title)
-        book_dir = self.output_dir / f"{safe_title}_obsidian"
+
+        # Create directory name in "Author - Title" format
+        book_dir = self.output_dir / f"{safe_author} - {safe_title}"
 
         # Create directory if it doesn't exist
         book_dir.mkdir(parents=True, exist_ok=True)
@@ -102,8 +111,8 @@ class ObsidianWriter:
         # Sanitize chapter title
         safe_title = self._sanitize_filename(chapter_title)
 
-        # Format as "01 - Chapter Title.md"
-        filename = f"{chapter_num:02d} - {safe_title}.md"
+        # Use only the title without numeric prefix
+        filename = f"{safe_title}.md"
 
         return filename
 
